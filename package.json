@@ -1,0 +1,30 @@
+{
+  "name": "web-spy-tool",
+  "version": "1.0.0",
+  "description": "web-syp-tool",
+  "main": "index.js",
+  "bin": {
+    "spy": "bin/index.js"
+  },
+  "dependencies": {
+    "anyproxy": "^4.1.3",
+    "chii": "^0.6.6",
+    "internal-ip": "^6.1.0",
+    "yargs": "^15.4.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "start": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/flowke/web-spy-tool.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/flowke/web-spy-tool/issues"
+  },
+  "homepage": "https://github.com/flowke/web-spy-tool#readme"
+}
