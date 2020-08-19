@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inspect with Chii</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Segoe UI',Arial,'Microsoft Yahei',sans-serif;
+      padding: 0 20px;
+      font-size: 13px;
+      font-family: Roboto;
+    }
+    a {
+      color: #1966d2;
+    }
+    img {
+      flex-shrink: 0;
+      height: 16px;
+      padding-left: 2px;
+      padding-right: 5px;
+      vertical-align: top;
+      width: 23px;
+    }
+    .content-header {
+      background: linear-gradient(white, white 40%, rgba(255, 255, 255, 0.92));
+      border-bottom: 1px solid #eee;
+      font-size: 150%;
+      padding: 20px 0 10px 0;
+      z-index: 1;
+    }
+    .row {
+      padding: 6px 0;
+      position: relative;
+    }
+    .properties-box {
+      display: flex;
+    }
+    .subrow-box {
+      display: inline-block;
+      vertical-align: top;
+    }
+    .subrow {
+      display: flex;
+      flex-flow: row wrap;
+    }
+    .subrow > div {
+      margin-right: 0.5em;
+    }
+    .url {
+      color: #999;
+    }
+    .action {
+      color: rgb(17, 85, 204);
+      cursor: pointer;
+      margin-right: 15px;
+    }
+
+    .description {
+      margin: 1rem 0;
+      font-size: .875rem;
+      line-height: 2;
+    }
+  </style>
+</head>
+<body>
+  <div class="content-header">Pages</div>
+  {{#each targets}}
+    <div class="row">
+      <div class="properties-box">
+        <img src="{{favicon}}"/>
+        <div class="subrow-box">
+          <div class="subrow">
+            <div class="name">{{title}}</div>
+            <div class="url">{{url}}</div>
+          </div>
+          <div class="actions">
+            <a class="action" onclick="inspect('{{id}}')">inspect</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  {{else}}
+    <div class="description">
+      You can use this script to inject the chii target code into your web page.<br/>
+      <a target="_blank" href="//{{domain}}/target.js">{{domain}}/target.js</a> <br/>
+      Or just open the demo page <a target="_blank" href="//{{domain}}/tests/demo.html">{{domain}}/tests/demo.html</a> to play around with.<br/>
+      <a target="_blank" href="https://github.com/liriliri/chii">Chii v{{version}}</a>
+    </div>  
+  {{/each}}
+  <script>
+    !function(o,e){"function"==typeof define&&define.amd?define([],e):"object"==typeof module&&module.exports?module.exports=e():o._=e()}(this,function(){var _={};"object"==typeof window&&window._&&(_=window._);var isBrowser=_.isBrowser="object"==typeof window&&"object"==typeof document&&9===document.nodeType,objToStr=_.objToStr=(e=Object.prototype.toString,function(o){return e.call(o)}),e,isNode=_.isNode="undefined"!=typeof process&&"[object process]"===objToStr(process),random=_.random=function(o,e,r){null==e&&(e=o,o=0);var t=Math.random();return r||o%1||e%1?Math.min(o+t*(e-o+parseFloat("1e-"+((t+"").length-1))),e):o+Math.floor(t*(e-o+1))},randomBytes=_.randomBytes=function(exports){var crypto;return exports=function(o){for(var e=new Uint8Array(o),r=0;r<o;r++)e[r]=random(0,255);return e},isBrowser?(crypto=window.crypto||window.msCrypto,crypto&&(exports=function(o){var e=new Uint8Array(o);return crypto.getRandomValues(e),e})):isNode&&(crypto=eval("require")("crypto"),exports=function(o){return crypto.randomBytes(o)}),exports}({});return _.randomId=function(){for(var o=0<arguments.length&&void 0!==arguments[0]?arguments[0]:21,e=1<arguments.length&&void 0!==arguments[1]?arguments[1]:"ModuleSymbhasOwnPr-0123456789ABCDEFGHIJKLNQRTUVWXYZ_cfgijkpqtvxz",r="",t=e.length,n=randomBytes(21);0<o--;)r+=e[n[o]%t];return r},_});
+  </script>
+  <script>
+    function inspect(id) {
+      const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+      const url = location.protocol + `//{{domain}}/front_end/chii_app.html?${protocol}={{domain}}/client/${_.randomId(6)}?target=${id}`;
+      window.open(url, '_blank');
+    }
+
+    const start = Date.now();
+    setInterval(() => {
+      fetch('/timestamp').then(res => res.text()).then(timestamp => {
+        if (timestamp > start) location.reload();
+      }, () => {});
+    }, 2000);
+  </script>
+</body>
+</html>

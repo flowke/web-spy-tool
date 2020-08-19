@@ -1,3 +1,3 @@
 module.exports = {
-  localIP: ''
+  https: true,
 }
