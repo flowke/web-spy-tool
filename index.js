@@ -1,5 +1,5 @@
 const AnyProxy = require('anyproxy');
-// AnyProxy.utils.systemProxyMgr.enableGlobalProxy('192.168.50.104', '8001');
+
 
 module.exports = ()=>{
   const options = {

@@ -1,27 +1,35 @@
 const chii = require('./chii/server/index');
 const internalIp = require('internal-ip');
 const fse = require('fs-extra');
-
+const cert = require('./lib/certManager');
+const path = require('path');
 let localIP = internalIp.v4.sync();
 
+let options = _g_options.get()
 
-let targetsString = fse.readFileSync(require.resolve('chii/public/target'), {
-  encoding: 'utf8'
-})
+_g_log()('localip:'.bold, localIP)()
+('mode:'.bold, options.https?'https':'http')();
 
-// console.log(targetsString);
 
+
+let sslCfg = {}
+
+if (options.https) {
+  sslCfg.key = fse.readFileSync(path.resolve(cert.getCaDir(), 'rootCA.key'))
+  sslCfg.cert = fse.readFileSync(path.resolve(cert.getCaDir(), 'rootCA.crt'))
+}
 
 chii.start({
   port: 6759,
-  https: true
-
+  https: !!options.https,
+  sslCfg: sslCfg
 })
 
 module.exports = {
-  summary: 'a rule to hack response',
+  // summary: 'a rule to hack response',
   *beforeDealHttpsRequest(){
-    return true
+    console.log(!!options.https);
+    return !!options.https
   },
   // * beforeSendRequest(requestDetail) {
   //   console.log('heeee', requestDetail.url);
@@ -44,15 +52,11 @@ module.exports = {
     let contentType = res.response.header['Content-Type']
 
     if (contentType && contentType.indexOf('html') !== -1) {
-      // console.log(`<script src="http://${localIP}:${6759}/target.js"></script>`);
-      let bodyArr = res.response.body.toString().split('</head>');
-      // bodyArr[0] += `<script src="http://chii.liriliri.io/target.js"></script>`;
-      // bodyArr[0] += `<script>${targetsString}</script>`;
-      bodyArr[0] += `<script src="//chii.liriliri.io/target.js"></script>`;
-      // bodyArr[0] += `<script src="//${localIP}:${6759}/target.js"></script>`;
-      res.response.body = bodyArr.join('</head>');
 
-      // console.log(res.response.body);
+      let bodyArr = res.response.body.toString().split('</head>');
+
+      bodyArr[0] += `<script src="https://${localIP}:${6759}/target.js"></script>`;
+      res.response.body = bodyArr.join('</head>');
 
     }
 
