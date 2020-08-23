@@ -1,5 +1,5 @@
 {
-  "name": "@xes/web-spy-tool",
+  "name": "@xes/spy",
   "version": "1.0.1",
   "description": "web-syp-tool",
   "main": "index.js",
