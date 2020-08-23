@@ -1,5 +1,5 @@
 {
-  "name": "web-spy-tool",
+  "name": "@xes/web-spy-tool",
   "version": "1.0.0",
   "description": "web-syp-tool",
   "main": "index.js",
@@ -27,15 +27,9 @@
   "scripts": {
     "start": ""
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/flowke/web-spy-tool.git"
-  },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/flowke/web-spy-tool/issues"
-  },
-  "homepage": "https://github.com/flowke/web-spy-tool#readme"
+  "license": "ISC"
+
+
 }
