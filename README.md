@@ -1,7 +1,7 @@
 # web-spy-tool
 
 ## 特性
-工具集成了 anyproxy, chii. 主要面向前端人员对webview的调试. 
+工具集成了 [anyproxy](http://anyproxy.io/cn/), [chii](https://github.com/liriliri/chii). 主要面向前端人员对webview的调试. 
 
 - [x] 自动化对页面注入chii, 快速对页面进行调试
 - [x] 支持https
@@ -90,3 +90,5 @@ module.exports = {
 
 ```
 
+## 关于正式配置
+转到[证书配置](http://anyproxy.io/cn/#%E8%AF%81%E4%B9%A6%E9%85%8D%E7%BD%AE)
