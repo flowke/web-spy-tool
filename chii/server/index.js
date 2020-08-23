@@ -15,8 +15,8 @@ function start({
   https,
   sslCfg = {}
 } = {}) {
-  domain = domain || (https?'https://':'http://')+'localhost:' + port;
-
+  domain = (domain || 'localhost') + ':'+ port;
+  console.log('domain', domain);
   const app = new Koa();
   const wss = new WebSocketServer();
 
@@ -30,14 +30,17 @@ function start({
     server.on('request', app.callback());
     wss.start(server);
   } else {
-    util.log(`chii starting server at ${domain}`);
+    util.log(`chii starting server at ${https?'https://':'http://'}${domain}`);
     console.log();
     // const server = host ? app.listen(port, host) : app.listen(port, host);
     if (https){
       server = httpsS.createServer(sslCfg, app.callback()).listen(port);
+      // new WebSocketServer().start(httpsS.createServer(sslCfg, app.callback()).listen(port))
     }else{
       server = http.createServer(app.callback()).listen(port);
     }
+
+    // new WebSocketServer().start(http.createServer(app.callback()).listen(port+1))
 
     wss.start(server);
   }

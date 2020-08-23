@@ -30,7 +30,9 @@ let externalList = []
 
 class Options{
   constructor(){
-    this.options = {}
+    this.options = {
+      port: 8001
+    }
     this.setDefaultProjectConfig();
   }
   get(){
