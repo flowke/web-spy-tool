@@ -1,16 +1,16 @@
 module.exports = {
   https: true,
   port: 8001,
-  chiiMode: 'http',
+  chiiMode: 'https',
   USER_HOME: process.env.HOME || process.env.USERPROFILE,
   // https: //developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP
   removeCSP: true,
   replaceHost: (url,r)=>{
-    // console.log(url, '======================');
-    if (url.indexOf('scistatic') !== -1) {
-      
+   
+    if (url.indexOf('activity.xueersi.com/lightliveclasstable') !== -1) {
+      console.log('=========================================');
       // console.log(r);
-      return 'https://www.jianshu.com/'
+      return 'http://192.168.0.5:8080'
     }
     
   },

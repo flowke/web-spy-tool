@@ -73,7 +73,7 @@ module.exports = {
           statusCode: 302,
           header: {
             'content-type': 'text/html',
-            location: 'http://192.168.0.5:8080'
+            location: newURL
           },
         }
       }
