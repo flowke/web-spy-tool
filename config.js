@@ -1,16 +1,16 @@
 module.exports = {
   https: true,
   port: 8001,
-  chiiMode: 'https',
+  chiiHttps: true,
+  noCache: true,
   USER_HOME: process.env.HOME || process.env.USERPROFILE,
   // https: //developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP
   removeCSP: true,
   replaceHost: (url,r)=>{
-   
+    // console.log(url);
     if (url.indexOf('activity.xueersi.com/lightliveclasstable') !== -1) {
-      console.log('=========================================');
-      // console.log(r);
-      return 'http://192.168.0.5:8080'
+
+      return 'http://192.168.50.104:8080/'
     }
     
   },
@@ -20,5 +20,8 @@ module.exports = {
       target: 'xueersi.com',
       path: 'c.com'
     }
-  ]
+  ],
+  anyProxy:{
+    silent: true
+  }
 }

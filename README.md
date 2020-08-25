@@ -63,7 +63,7 @@ module.exports = {
   removeCSP: true, // 是否移除CSP限制
   // 地址重定向: 方式一: 提供一个function
   replaceHost: (url,r)=>{
-    // console.log(url, '======================');
+
     if (url.indexOf('scistatic') !== -1) {
       
       // console.log(r);

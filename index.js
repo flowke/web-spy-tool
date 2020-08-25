@@ -1,11 +1,11 @@
 const AnyProxy = require('anyproxy');
-
+// AnyProxy.utils.systemProxyMgr.enableGlobalProxy('127.0.0.1', '8001');
 let option = _g_options.get();
 
 module.exports = ()=>{
   const options = {
     port: option.port,
-    rule: require('./proxyRule'),
+    rule: new (require('./proxyRule'))().getRule(),
     webInterface: {
       enable: true,
       webPort: option.port+1
