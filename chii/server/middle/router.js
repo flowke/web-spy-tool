@@ -12,30 +12,45 @@ const pkg = require('../../package.json');
 
 const maxAge = ms('2h');
 
-module.exports = function (channelManager, domain) {
+function routerMid(channelManager, domain, type) {
   const router = new Router();
-
+  routerMid.setChannelManager({
+    title: type,
+    channerM: channelManager
+  });
   router.get('/', async ctx => {
-    const targets = reverse(
-      map(pairs(channelManager.getTargets()), item => ({
-        id: item[0],
-        ...item[1],
-      }))
-    );
+
+    let targetsList = routerMid.channelManagerList.map(({
+          title,
+          channerM
+        }) => {
+      return {
+        title,
+        targets: reverse(
+          map(pairs(channerM.getTargets()), item => ({
+            id: item[0],
+            ...item[1],
+          }))
+        )
+      }
+    })
 
     const tpl = await readTpl('index');
     ctx.body = tpl({
-      targets,
+      targetsList,
       domain,
       version: pkg.version,
     });
   });
 
-  let timestamp = now();
+  routerMid.timestamp = now();
   router.get('/timestamp', ctx => {
-    ctx.body = timestamp;
+    ctx.body = routerMid.timestamp;
   });
-  channelManager.on('target_changed', () => (timestamp = now()));
+  // routerMid.channelManagerList.forEach(d=>{
+  //   d.channerM.on('target_changed', () => (timestamp = now()));
+  // })
+  // channelManager.on('target_changed', () => (timestamp = now()));
 
   function createStatic(prefix, folder) {
     router.get(`${prefix}/*`, async ctx => {
@@ -58,3 +73,13 @@ module.exports = function (channelManager, domain) {
 
   return router.routes();
 };
+
+routerMid.channelManagerList = []
+
+routerMid.setChannelManager = (c)=>{
+  c.channerM.on('target_changed', () => (routerMid.timestamp = now()));
+  routerMid.channelManagerList.push(c);
+}
+
+
+module.exports = routerMid
