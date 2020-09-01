@@ -8,6 +8,7 @@ let userConfig = {};
 let projectConfig = {};
 let projectConfigPath = path.resolve('SPYCONFIG.js')
 
+// 设置用户配置
 try {
   if (!local.USER_HOME){
     let err = new Error('没有检测到有效的用户目录, 用户配置将不生效.')
@@ -20,10 +21,7 @@ try {
     userConfig = cfg;
   }
 } catch (error) {
-  // let msg = error.errCode===0? error.message : '用户级别配置文件无效, 将不启用用户配置.'
-  // log()
-  //   .info(msg)
-  //   ();
+
 }
 
 let externalList = []
@@ -31,7 +29,7 @@ let externalList = []
 class Options{
   constructor(){
     this.options = {
-      port: 8001
+      ...local
     }
     this.setDefaultProjectConfig();
   }
@@ -77,7 +75,5 @@ class Options{
 }
 
 let op = new Options();
-
-op.merge(local)
 
 module.exports = op

@@ -1,7 +1,6 @@
 const Koa = require('koa');
 const http = require('http');
 const httpsS = require('https');
-const sslify = require('koa-sslify').default;
 const router = require('./middle/router');
 const compress = require('./middle/compress');
 const util = require('./lib/util');
@@ -76,11 +75,11 @@ function netServer(op){
         socket.pipe(proxy).pipe(socket);
       })
       proxy.on('error', function (err) {
-        console.log(err);
+        // console.log(err);
       });
     })
     socket.on('error', function (err) {
-      console.log(err);
+      // console.log(err);
     });
   }).listen(port);
 }

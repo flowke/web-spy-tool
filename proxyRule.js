@@ -21,7 +21,7 @@ module.exports = class Rule{
       hittingRedirection: []
     }
 
-    this.startChii();
+    this.startInspector();
 
     _g_log
       ()
@@ -36,7 +36,7 @@ module.exports = class Rule{
       
   }
 
-  startChii(){
+  startInspector(){
     let sslCfg = {}
 
     if (options.https) {
@@ -86,6 +86,7 @@ module.exports = class Rule{
             }
           }
         }
+
         // 移除缓存
         if (options.noCache) {
           removeCache(requestDetail.requestOptions.headers)
@@ -111,7 +112,7 @@ module.exports = class Rule{
           // 验证html
           if (!content || content.indexOf('</head>') === -1) return
 
-          _g_log()('chii apply to '.bold.cyan, reqDetail.url)
+          _g_log()('inspector apply to '.bold.cyan, reqDetail.url)
 
           let bodyArr = content.split('</head>');
           bodyArr[0] += `<script src="//${localIP}:${chiiPort}/target.js"></script>`;
@@ -126,9 +127,7 @@ module.exports = class Rule{
 
         // 移除缓存
         if(options.noCache){
-          // console.log(res.response.header);
           removeCache(res.response.header)
-          // console.log('fix'.bold, res.response.header);
         }
 
         return Promise.resolve({
@@ -154,12 +153,12 @@ function removeCache(headers){
   })
 
 }
-
+// 执行url替换, 返回新字符串
 function peformRedirectHost(url, requestDetail) {
   let newURL = ''
   // console.log(options);
-  if (Array.isArray(options.replaceHost)) {
-    options.replaceHost.forEach(d => {
+  if (Array.isArray(options.redirect)) {
+    options.redirect.forEach(d => {
 
       if (Array.isArray(d) && d[0] && d[1]) {
         if (url.indexOf(d[0]) !== -1) {
@@ -170,8 +169,8 @@ function peformRedirectHost(url, requestDetail) {
     })
   }
 
-  if (typeof options.replaceHost === 'function') {
-    let d = options.replaceHost(url, requestDetail)
+  if (typeof options.redirect === 'function') {
+    let d = options.redirect(url, requestDetail)
     if (d && typeof d === 'string') newURL = d;
   }
   return newURL
