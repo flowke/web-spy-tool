@@ -3,11 +3,12 @@
 ## 特性
 工具集成了 [anyproxy](http://anyproxy.io/cn/), [chii](https://github.com/liriliri/chii). 主要面向前端人员对webview的调试. 
 
+
 - [x] 自动化对页面注入chii, 快速对页面进行调试
 - [x] 支持https
-- [x] 本地化运行chii, 支持https
+- [x] 本地化运行chii, 同时支持http与https
 - [x] 便捷的重定向, 在webview快速调试本地代码
-- [ ] 便捷的脚本注入 
+- [x] 便捷的脚本注入 
 - [ ] 移除CSP限制
 - [x] 基于anyproxy, 集成了便捷的证书管理
 
