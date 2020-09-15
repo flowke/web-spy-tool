@@ -6,6 +6,8 @@ const path = require('path');
 
 require('colors');
 
+
+
 const URL = require('url').URL;
 
 let localIP = internalIp.v4.sync();
@@ -55,6 +57,43 @@ module.exports = class Rule{
 
   }
 
+  performRedirect(requestDetail) {
+    let url = requestDetail.url
+    let redirectionURL = peformRedirectHost(url, requestDetail)
+
+
+    // 是否有要重定向的url
+    if (redirectionURL) {
+      redirectionURL = redirectionURL.replace(/\/$/, '') + '/'
+
+      _g_log.debug('will redirect:', url)
+        .debug('redirect to:', redirectionURL)
+
+      // console.log('命中重定向', redirectionURL);
+      this.ctx.hittingRedirection.push(redirectionURL)
+
+      _g_log()(url + ' redirect to '.green.bold + redirectionURL)
+
+      return {
+        response: {
+          statusCode: 302,
+          header: {
+            'content-type': 'text/html',
+            location: redirectionURL
+          },
+        }
+      }
+    }
+
+    // 移除缓存
+    // if (options.noCache) {
+    //   removeCache(requestDetail.requestOptions.headers)
+    //   return {
+    //     requestOptions: requestDetail.requestOptions
+    //   }
+    // }
+  }
+
   getRule(){
     let self = this;
     return {
@@ -71,6 +110,10 @@ module.exports = class Rule{
         // 是否有要重定向的url
         if (redirectionURL) {
           redirectionURL = redirectionURL.replace(/\/$/,'')+'/'
+
+          _g_log.debug('will redirect:', url)
+          .debug('redirect to:', redirectionURL)
+          
           // console.log('命中重定向', redirectionURL);
           self.ctx.hittingRedirection.push(redirectionURL)
 
@@ -89,6 +132,7 @@ module.exports = class Rule{
 
         // 移除缓存
         if (options.noCache) {
+          _g_log.debug('action:','remove cache')
           removeCache(requestDetail.requestOptions.headers)
           return {
             requestOptions: requestDetail.requestOptions
@@ -103,8 +147,15 @@ module.exports = class Rule{
         // chii 脚本
         // 验证html
         if (contentType && contentType.indexOf('text/html') !== -1 && Number(res.response.statusCode) < 400) {
-          // 移除chii 本身的注入
+          _g_log.debug('detected html:', reqDetail.url);
+
+          // 移除chii监视页 本身的注入
           if (reqDetail.url.indexOf(':' + chiiPort) !== -1) return;
+          
+
+          // let redirectInfo = self.performRedirect(reqDetail)
+          // console.log(redirectInfo);
+          // if (redirectInfo) return redirectInfo
 
           // console.log(contentType.bold.cyan, reqDetail.url);
           let content = res.response.body.toString();
@@ -156,7 +207,7 @@ function removeCache(headers){
 // 执行url替换, 返回新字符串
 function peformRedirectHost(url, requestDetail) {
   let newURL = ''
-  // console.log(options);
+  let options = _g_options.get();
   if (Array.isArray(options.redirect)) {
     options.redirect.forEach(d => {
 
@@ -164,6 +215,11 @@ function peformRedirectHost(url, requestDetail) {
         if (url.indexOf(d[0]) !== -1) {
           newURL = d[1]
         }
+      }
+      // console.log(url, newURL);
+      // console.log(d , url, newURL);
+      if(typeof d ==='string'){
+        newURL = d
       }
 
     })
@@ -173,5 +229,6 @@ function peformRedirectHost(url, requestDetail) {
     let d = options.redirect(url, requestDetail)
     if (d && typeof d === 'string') newURL = d;
   }
+  // console.log('newURL', newURL);
   return newURL
 }

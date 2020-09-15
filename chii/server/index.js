@@ -8,7 +8,7 @@ const net = require('net');
 const WebSocketServer = require('./lib/WebSocketServer');
 
 function start({
-  port = 8080,
+  port = 8088,
   host,
   domain,
   server,
@@ -16,7 +16,7 @@ function start({
   sslCfg = {}
 } = {}) {
 
-
+  let entryPort = port;
   let httpsPort = port+1;
   let httpPort = port+2;
 
@@ -25,12 +25,14 @@ function start({
   });
 
   if (https) createServer('https', {
+    entryPort,
     port:httpsPort,
     sslCfg,
     domain,
   });
 
   netServer({
+    entryPort,
     httpsPort, httpPort,port
   });
   
@@ -41,6 +43,7 @@ function createServer(type, options){
 
   let {
     port,
+    entryPort,
     domain,
     sslCfg = {}
   } = options;
@@ -48,9 +51,9 @@ function createServer(type, options){
   const app = new Koa();
   const wss = new WebSocketServer();
 
-  domain = (domain || 'localhost') + ':' + port;
+  domain = (domain || 'localhost') + ':' + entryPort;
 
-  app.use(compress()).use(router(wss.channelManager, domain, type));
+  app.use(compress()).use(router(wss.channelManager, domain, type, port));
 
   let serverOptions = [app.callback()]
 
@@ -62,7 +65,7 @@ function createServer(type, options){
   }
 
 
-  wss.start(serve.createServer(sslCfg, app.callback()).listen(port))
+  wss.start(serve.createServer(...serverOptions).listen(port))
 }
 
 function netServer(op){

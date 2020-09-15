@@ -8,8 +8,7 @@
 - [x] 支持https
 - [x] 本地化运行chii, 同时支持http与https
 - [x] 便捷的重定向, 在webview快速调试本地代码
-- [x] 便捷的脚本注入 
-- [ ] 移除CSP限制
+
 - [x] 基于anyproxy, 集成了便捷的证书管理
 
 ## 安装与启动 
@@ -63,7 +62,7 @@ module.exports = {
   // https: //developer.mozilla.org/zh-CN/docs/Web/HTTP/CSP
   removeCSP: true, // 是否移除CSP限制
   // 地址重定向: 方式一: 提供一个function
-  replaceHost: (url,r)=>{
+  redirect: (url,r)=>{
 
     if (url.indexOf('scistatic') !== -1) {
       
@@ -73,19 +72,9 @@ module.exports = {
     
   },
   // 地址重定向: 方式而: 提供一个Array
-  replaceHost: [
+  redirect: [
     'https://baidu.com', //对所有地址有效
     ['a.com', 'b.com'], //对特定域名进行重定向
-  ],
-  // 脚本注入
-  injectScripts: [
-    // 对所有html文件注入
-    '//abc.com/cc.js',
-    // 对指定域植入
-    {
-      target: 'xueersi.com', // 
-      path: '/path/to/script.js' //脚本的路径,基于工作目录的相对地址或绝对地址
-    }
   ]
 }
 
