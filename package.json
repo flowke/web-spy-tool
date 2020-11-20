@@ -10,6 +10,7 @@
     "anyproxy": "^4.1.3",
     "chii": "^0.6.6",
     "colors": "^1.4.0",
+    "debug": "^4.1.1",
     "fs-extra": "^9.0.1",
     "handlebars": "^4.7.6",
     "internal-ip": "^6.1.0",

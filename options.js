@@ -5,24 +5,25 @@ const log = require('./lib/logTool');
 
 
 let userConfig = {};
-let projectConfig = {};
 let projectConfigPath = path.resolve('SPYCONFIG.js')
+
 
 // 设置用户配置
 try {
-  if (!local.USER_HOME){
+  if (!local.USER_HOME) {
     let err = new Error('没有检测到有效的用户目录, 用户配置将不生效.')
     err.errCode = 0
     throw err
   }
 
   let cfg = require(path.resolve(local.USER_HOME, '.spyconfig/SPYCONFIG.js'));
-  if(({}).toString.call(cfg) === '[object Object]'){
+  if (({}).toString.call(cfg) === '[object Object]') {
     userConfig = cfg;
   }
 } catch (error) {
 
 }
+
 
 let externalList = []
 
@@ -31,9 +32,11 @@ class Options{
     this.options = {
       ...local
     }
-    this.setDefaultProjectConfig();
+
   }
   get(){
+    let projectConfig = this.getProjectConfig()
+
     return Object.assign({}, this.options, userConfig, projectConfig, ...externalList)
   }
 
@@ -47,16 +50,20 @@ class Options{
     this.options[key] = val;
   }
   // 设置默认的本地配置
-  setDefaultProjectConfig(){
+  getProjectConfig(){
     // console.log(require.resolve.paths(projectConfigPath));
     try {
       let cfg = require(projectConfigPath);
+
+      if(typeof cfg ==='function') cfg = cfg();
+
       if (({}).toString.call(cfg) === '[object Object]') {
-        projectConfig = cfg;
+        return cfg;
       }
     } catch (error) {
 
     }
+    return {}
   }
   // 设置用户指定的本地配置
   setConfigPath(configPath){
