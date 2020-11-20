@@ -116,14 +116,25 @@ module.exports = class Rule{
 
           let bodyArr = content.split('</head>');
           bodyArr[0] += `<script src="//${localIP}:${chiiPort}/target.js"></script>`;
-          res.response.body = bodyArr.join('</head>');
+          content = bodyArr.join('</head>');
+
+            // 脚本注入
+          if (Array.isArray(options.injectScripts)) {
+            let headArr = content.split('<head>');
+            options.injectScripts.forEach(d=>{
+              if(reqDetail.url.indexOf(d.target)!==-1){
+                headArr[0]+=`<script src="${d.path}"></script>`;
+              }
+            })
+            content = headArr.join('<head>');
+            // console.log(content.split('/head')[0]);
+          }
+
+          res.response.body = content;
         }
 
 
-        // 脚本注入
-        if (Array.isArray(options.injectScripts)) {
-
-        }
+        
 
         // 移除缓存
         if(options.noCache){

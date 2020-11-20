@@ -82,6 +82,7 @@ module.exports = {
     '//abc.com/cc.js',
     // 对指定域植入
     {
+      replace: '',
       target: 'xueersi.com', // 
       path: '/path/to/script.js' //脚本的路径,基于工作目录的相对地址或绝对地址
     }
