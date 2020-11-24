@@ -76,6 +76,16 @@ module.exports = {
     'https://baidu.com', //对所有地址有效
     ['a.com', 'b.com'], //对特定域名进行重定向
   ],
+  // 替换返回内容
+  replaceContent: [
+    {
+      target: 'https://testmv.xesimg.com/courseware_pages/f47d0170ad70e5b90582c0878ce300ca/index.html',
+      content: c=>{
+        c = c.replace('./common/js/xyJssdk.js', 'http://10.74.8.84:8080/xyJssdk.js')
+        return c;
+      }
+    }
+  ],
   // 脚本注入
   injectScripts: [
     // 对所有html文件注入

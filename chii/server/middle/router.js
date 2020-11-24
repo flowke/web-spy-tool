@@ -14,6 +14,7 @@ const maxAge = ms('2h');
 
 function routerMid(channelManager, domain, type) {
   const router = new Router();
+  // 目前来说, 有两个
   routerMid.setChannelManager({
     title: type,
     channerM: channelManager

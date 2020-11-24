@@ -34,7 +34,7 @@ module.exports = class Rule{
       (!!isHttps ,'https proxy serve at: '.bold + `https://${localIP}:${options.port}`)()
       ('web interface serve at: '.bold + `http://${localIP}:${options.port+1}`)()
       (!!isHttps, 'chii https serve at: '.bold + `https://${localIP}:${chiiPort}`)()
-      ('chii http serve at: '.bold + `http://${localIP}:${chiiPort}`)()
+      // ('chii http serve at: '.bold + `http://${localIP}:${chiiPort}`)()
       
   }
 
@@ -168,6 +168,17 @@ module.exports = class Rule{
           let bodyArr = content.split('</head>');
           bodyArr[0] += `<script src="//${localIP}:${chiiPort}/target.js"></script>`;
           content = bodyArr.join('</head>');
+
+          // 替换字符串
+          if(Array.isArray(options.replaceContent)){
+            options.replaceContent.forEach(d=>{
+              if(reqDetail.url.indexOf(d.target)!==-1){
+                _g_log()('replaceContent url:'.bold.cyan, d.target)
+
+                content = d.content(content)
+              }
+            })
+          }
 
             // 脚本注入
           if (Array.isArray(options.injectScripts)) {
