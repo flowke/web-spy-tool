@@ -16,7 +16,30 @@
 ```bash
 -> npm i -g @xes/spy
 
+生成证书以及进行确认, 其中会进行交互式操作
+成功后电脑端就做好了证书配置
+-> spy ca init
+
+# 启动代理服务
 -> spy serve
+
+会打印如下内容:
+localip: 10.74.8.84
+
+mode: https
+
+# 此处两项表示可以在别的设备(比如你的手机)配置代理的参数, 以连上你的电脑
+http proxy serve at: http://10.74.8.84:8001
+https proxy serve at: https://10.74.8.84:8001
+# 此处连接打开后是一个抓包页面, 可用课不用
+web interface serve at: http://10.74.8.84:8002
+# 此连接为监视页面, 需要打开
+chii https serve at: https://10.74.8.84:8003
+
+
+接着配置证书, 查看下面配置证书章节
+
+
 ```
 ## cli 命令
 
