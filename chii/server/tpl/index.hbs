@@ -80,6 +80,7 @@
           <img src="{{favicon}}" />
           <div class="subrow-box">
             <div class="subrow">
+              <div style="color:red;">{{ua}}</div>
               <div class="name">{{title}}</div>
               <div class="url">{{url}}</div>
             </div>
@@ -106,7 +107,7 @@
   <script>
     function inspect(id,pageurl, port) {
       let urlObj = new URL(pageurl);
-      console.log(urlObj)
+
       const protocol = urlObj.protocol === 'https:' ? 'wss' : 'ws';
       const url = urlObj.protocol + `//{{domain}}/front_end/chii_app.html?${protocol}={{domain}}/client/${_.randomId(6)}?target=${id}`;
 
@@ -117,7 +118,7 @@
     const start = Date.now();
     setInterval(() => {
       fetch(`//${location.host}/timestamp`).then(res => res.text()).then(timestamp => {
-        console.log(timestamp, start)
+
         if (timestamp > start) location.reload();
       }, () => { });
       

@@ -8,7 +8,25 @@ import chobitsu from 'chobitsu';
 
 const sessionStore = safeStorage('session');
 
+let ua = navigator.userAgent;
+
+ua = ua.replace(/[\/\s\.;,]/g,'_')
+
 let ChiiServerUrl = location.host;
+
+// console.__slog = console.log;
+// window._preLogs_ = []
+// console.log = function(){
+//   window._preLogs_.push(arguments);
+//   console.__slog.apply(console,arguments)
+// }
+// console.log(navigator.userAgent);
+// window._listConsole = function (){
+//   console.log = console.__slog
+//   window._preLogs_.forEach(args=>{
+//     console.log.apply(console,args)
+//   })
+// }
 
 function getTargetScriptEl() {
   const elements = document.getElementsByTagName('script');
@@ -37,14 +55,18 @@ if (window.ChiiServerUrl) {
 
 function getFavicon() {
   let favicon = location.origin + '/favicon.ico';
-
-  const $link = $('link');
-  $link.each(function () {
-    if (contain(this.getAttribute('rel') || '', 'icon')) {
-      const href = this.getAttribute('href');
-      if (href) favicon = fullUrl(href);
-    }
-  });
+  try {
+    const $link = $('link');
+    $link.each(function () {
+      if (contain(this.getAttribute('rel') || '', 'icon')) {
+        const href = this.getAttribute('href');
+        if (href) favicon = fullUrl(href);
+      }
+    });
+  } catch (error) {
+    console.log(error);
+  }
+  
 
   return favicon;
 }
@@ -67,11 +89,19 @@ if (!id) {
 
 const protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
 
+let showUA = '';
+try {
+  showUA = ua.match(/\(([^)]*)\)/)[1]
+} catch (error) {
+  
+}
+
 const ws = new Socket(
   `${protocol}//${ChiiServerUrl}/target/${id}?${query.stringify({
     url: location.href,
     title: window.ChiiTitle || document.title,
     favicon: getFavicon(),
+    ua: showUA
   })}`
 );
 
@@ -82,7 +112,7 @@ ws.on('open', () => {
   });
 });
 
-chobitsu.setOnMessage(() => {
+chobitsu.setOnMessage((message) => {
   if (!isInit) return;
   ws.send(message);
 });
